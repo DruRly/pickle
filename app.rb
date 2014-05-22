@@ -18,8 +18,6 @@ end
 
 post '/failures' do
   content_type :json
-  puts params
-  puts request.body.read
   new_id = settings.mongo_db['test'].insert params
   document_by_id(new_id)
 end
