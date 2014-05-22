@@ -11,8 +11,15 @@ configure do
   set :mongo_db, conn.db('pickle')
 end
 
-post '/failure' do
+get '/failures' do
   content_type :json
+  settings.mongo_db['test'].find.to_a.to_json
+end
+
+post '/failures' do
+  content_type :json
+  puts params
+  puts request.body.read
   new_id = settings.mongo_db['test'].insert params
   document_by_id(new_id)
 end
@@ -28,3 +35,5 @@ helpers do
       find_one(:_id => id).to_json
   end
 end
+
+# Example Post: HTTParty.post 'http://localhost:4567/failures', body: { "name" => 'blah' }
