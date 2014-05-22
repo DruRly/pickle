@@ -16,3 +16,15 @@ post '/failure' do
   new_id = settings.mongo_db['test'].insert params
   document_by_id(new_id)
 end
+
+helpers do
+  def object_id val
+    BSON::ObjectId.from_string(val)
+  end
+
+  def document_by_id id
+    id = object_id(id) if String === id
+    settings.mongo_db['test'].
+      find_one(:_id => id).to_json
+  end
+end
