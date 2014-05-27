@@ -6,7 +6,11 @@ require 'json/ext' # required for .to_json
 include Mongo
 
 configure do
-  conn = MongoClient.new("localhost", 27017)
+  if ENV['MONGOLAB_URI']
+    conn = MongoClient.from_uri(ENV['MONGOLAB_URI'])
+  else
+    conn = MongoClient.new("localhost", 27017)
+  end
   set :mongo_connection, conn
   set :mongo_db, conn.db('pickle')
 end
